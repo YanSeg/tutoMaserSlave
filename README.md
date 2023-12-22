@@ -17,10 +17,10 @@ docker compose up
 - Vérifier la bonne création des 3 containers
 ``` 
 yans@yans-IdeaPad-3-15IML05:~$ docker ps 
-CONTAINER ID   IMAGE          COMMAND                  CREATED             STATUS             PORTS                                                                                  NAMES
-71ac447dd842   yanseg/worms   "/usr/local/bin/entr…"   About an hour ago   Up About an hour   0.0.0.0:8081->80/tcp, :::8081->80/tcp, 0.0.0.0:19998->19999/tcp, :::19998->19999/tcp   master_slave-wordpress-netdata-1
-87cf7c948a50   mariadb        "docker-entrypoint.s…"   About an hour ago   Up 10 minutes      3306/tcp                                                                               SQL-SLAVE01
-0fbac997549d   mariadb        "docker-entrypoint.s…"   About an hour ago   Up About an hour   3306/tcp
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS         PORTS                                                                                  NAMES
+3556b2ddae97   yanseg/worms   "/usr/local/bin/entr…"   10 seconds ago   Up 8 seconds   0.0.0.0:8081->80/tcp, :::8081->80/tcp, 0.0.0.0:19998->19999/tcp, :::19998->19999/tcp   WORDPRESS
+0dbf36707800   mariadb        "docker-entrypoint.s…"   10 seconds ago   Up 9 seconds   3306/tcp                                                                               SQL-MASTER
+fb7b2a96514f   mariadb        "docker-entrypoint.s…"   10 seconds ago   Up 9 seconds   3306/tcp                                                                               SQL-SLAVE01
 
 ```
 
@@ -147,7 +147,7 @@ je vérifie bien que :
 ```
 yans@yans-IdeaPad-3-15IML05:~$ docker ps 
 CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                                                                                  NAMES
-71ac447dd842   yanseg/worms   "/usr/local/bin/entr…"   21 seconds ago   Up 17 seconds   0.0.0.0:8081->80/tcp, :::8081->80/tcp, 0.0.0.0:19998->19999/tcp, :::19998->19999/tcp   master_slave-wordpress-netdata-1
+71ac447dd842   yanseg/worms   "/usr/local/bin/entr…"   21 seconds ago   Up 17 seconds   0.0.0.0:8081->80/tcp, :::8081->80/tcp, 0.0.0.0:19998->19999/tcp, :::19998->19999/tcp   WORDPRESS
 87cf7c948a50   mariadb        "docker-entrypoint.s…"   21 seconds ago   Up 18 seconds   3306/tcp                                                                               SQL-SLAVE01
 0fbac997549d   mariadb        "docker-entrypoint.s…"   21 seconds ago   Up 18 seconds   3306/tcp                                                                               SQL-MASTER
 yans@yans-IdeaPad-3-15IML05:~$ docker exec -it SGL-MASTER bash 
@@ -187,7 +187,7 @@ root@0fbac997549d:/# exit
 exit
 yans@yans-IdeaPad-3-15IML05:~$ docker ps 
 CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                                                                                  NAMES
-71ac447dd842   yanseg/worms   "/usr/local/bin/entr…"   29 minutes ago   Up 29 minutes   0.0.0.0:8081->80/tcp, :::8081->80/tcp, 0.0.0.0:19998->19999/tcp, :::19998->19999/tcp   master_slave-wordpress-netdata-1
+71ac447dd842   yanseg/worms   "/usr/local/bin/entr…"   29 minutes ago   Up 29 minutes   0.0.0.0:8081->80/tcp, :::8081->80/tcp, 0.0.0.0:19998->19999/tcp, :::19998->19999/tcp   WORDPRESS
 87cf7c948a50   mariadb        "docker-entrypoint.s…"   29 minutes ago   Up 29 minutes   3306/tcp                                                                               SQL-SLAVE01
 0fbac997549d   mariadb        "docker-entrypoint.s…"   29 minutes ago   Up 29 minutes   3306/tcp                                                                               SQL-MASTER
 yans@yans-IdeaPad-3-15IML05:~$ docker exec -it SQL-MASTER bash 
@@ -287,9 +287,9 @@ root@87cf7c948a50:/#
 ## 1 Installer wordpress, s'y connecter créer un post 
 - Je récupère l'IP du container wordpress
 ``` 
-./ipContainer.sh master_slave-wordpress-netdata-1
+./ipContainer.sh WORDPRESS
 ```
-L'adresse IP du conteneur 'master_slave-wordpress-netdata-1' est : 172.21.0.4
+L'adresse IP du conteneur 'WORDPRESS' est : 172.21.0.4
 
 - Puis je me rend dans mon browser
 http://172.21.0.4/wp-admin/install.php

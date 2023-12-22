@@ -35,6 +35,7 @@ services:
 
   wordpress-netdata:
     image: yanseg/worms
+    container_name: WORDPRESS
     environment:
       WORDPRESS_DB_HOST: maria_master:3306
       WORDPRESS_DB_USER: wordpress
