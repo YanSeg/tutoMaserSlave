@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  maria_master:
+    image: mariadb
+    container_name: SQL-MASTER
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - mariadbMaster:/var/lib/mysql
+    command: --log-bin --server-id=1  
+    networks:
+      - internal_network
+    expose:
+      - "3306"
+
+  maria_slave:
+    image: mariadb
+    container_name: SQL-SLAVE01
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - mariadbSlave1:/var/lib/mysql
+    command: --log-bin --server-id=2      
+    networks:
+      - internal_network
+    expose:
+      - "3306"
+
+  wordpress-netdata:
+    image: yanseg/worms
+    environment:
+      WORDPRESS_DB_HOST: maria_master:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    networks:
+      - internal_network
+    ports:
+      - "8081:80"
+      - "19998:19999"
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - maria_master
+    restart: unless-stopped
+
+networks:
+  internal_network:
+    driver: bridge
+
+volumes:
+  mariadbMaster:
+  wordpress:
+  mariadbSlave1:
